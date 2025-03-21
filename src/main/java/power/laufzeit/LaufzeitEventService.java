@@ -11,6 +11,7 @@ import power.tarif.TarifRepository;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class LaufzeitEventService {
@@ -28,8 +29,7 @@ public class LaufzeitEventService {
 		this.calculator = calculator;
 	}
 
-	@Scheduled(cron = "0 0 11,16,21 * * *")
-	//@Scheduled(fixedDelay = 5000)
+	@Scheduled(fixedRate = 600000)
 	public void stampEvent() throws IOException {
 		Tarif aktuellerTarif = tarifRepository.findAktuellertatrif();
 		int laufzeit = laufzeitFileManager.readNumber();
@@ -45,5 +45,29 @@ public class LaufzeitEventService {
 
 	public LocalDate getFirstEvent() {
 		return laufzeitEventRepository.getFirstLaufzeit();
+	}
+
+	public List<LaufzeitEvent> findByStampedAt(LocalDate date) {
+		return laufzeitEventRepository.findByStampedAt(date);
+	}
+
+	public int getLaufzeitSekundenbyDate(LocalDate date) {
+		List<LaufzeitEvent> events = laufzeitEventRepository.findByStampedAt(date);
+
+		int min = events.get(0).laufzeit();
+		int max = events.get(0).laufzeit();
+
+		for (LaufzeitEvent event : events) {
+			int currentLaufzeit = event.laufzeit();
+			if (currentLaufzeit < min) min = event.laufzeit();
+			if (currentLaufzeit > max) max = currentLaufzeit;
+
+		}
+
+		System.out.println("min: " + min);
+		System.out.println("max: " + max);
+
+		return max - min;
+
 	}
 }
