@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Tarif</title>
+  <link rel="stylesheet" href="/webjars/bootstrap/5.3.2/css/bootstrap.min.css">
+  <link rel="stylesheet" th:href="@{/styles/tarif.css}">
+  <link rel="icon" href="/favicon.ico" type="image/x-icon">
+  <script src="/webjars/jquery/3.7.1/jquery.min.js"></script>
+  <script src="/webjars/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+</head>
+<body>
+<div id="tarif-container">
+  <div id="tarif-form-box">
+    <form method="post" th:action="@{/new-tarif}" th:object="${tarifForm}">
+      <h2>Neuen Tarif erstellen</h2>
+      <label for="tarif" class="form-label">Tarifkosten eingeben (kWatt/Eurocent)</label>
+      <input id="tarif" class="form-control" type="text" th:field="*{tarifKosten}">
+      <button type="submit" class="btn btn-primary">Tarif erstellen</button>
+      <small style="color: red;" th:if="${#fields.hasErrors('tarifKosten')}" th:errors="*{tarifKosten}">Semester Error</small>
+    </form>
+  </div>
+  <a th:href="@{/}">zurück</a>
+</div>
+</body>
+</html>

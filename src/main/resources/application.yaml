@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: powerconsumption
+  datasource:
+    password: 1234
+    username: timo
+    url: jdbc:postgresql://localhost:5437/power
+server:
+  port: 8090
+verbrauch:
+  watt:
+    normal: 300 #250+350/2 = 300
+    last: 450 # 400+500/2 = 450
+  gewicht:
+    normal: 0.70
+    last: 0.30
