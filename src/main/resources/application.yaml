@@ -14,3 +14,5 @@ verbrauch:
   gewicht:
     normal: 0.70
     last: 0.30
+provider:
+  url: ${PROVIDER_URL}
