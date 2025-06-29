@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Stromverbrauch Details</title>
+    <link rel="stylesheet" href="/webjars/bootstrap/5.3.2/css/bootstrap.min.css">
+    <link rel="stylesheet" th:href="@{/styles/details.css}">
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    <script src="/webjars/jquery/3.7.1/jquery.min.js"></script>
+    <script src="/webjars/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+</head>
+<body>
+
+<div class="details-container">
+    <h2>Aktueller Monat <span th:text="${thisMonth}"></span></h2>
+    <div class="details-table-container">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Datum</th>
+                <th>Laufzeit</th>
+                <th>kwh</th>
+                <th>Kosten</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="detail : ${monthDetails}">
+                <td th:text="${detail.date()}"></td>
+                <td th:text="${detail.laufzeit()}"></td>
+                <td th:text="${detail.kwh()}"></td>
+                <td th:text="${detail.kosten()}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <a th:href="@{/}">zurück</a>
+</div>
+
+<div class="details-container">
+    <h2>Vergangene Monate</h2>
+    <div class="details-table-container">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Monat</th>
+                <th>Laufzeit</th>
+                <th>kwh</th>
+                <th>Kosten</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="detail : ${monthsDetails}">
+                <td th:text="${detail.date()}"></td>
+                <td th:text="${detail.laufzeit()}"></td>
+                <td th:text="${detail.kwh()}"></td>
+                <td th:text="${detail.kosten()}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>
