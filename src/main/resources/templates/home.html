@@ -18,6 +18,13 @@
         <p>Kosten: <span th:text="${currentCost}"></span>€ bei einem Tarif von <span th:text="${currentTarif}"></span> Cent/kwh</p>
     </div>
     <a th:href="@{/tarif}">Tarif erstellen</a>
+    <form method="get" th:action="@{/check-tarif}">
+        <button class="btn btn-outline-primary">Neuer Tarif prüfen</button>
+    </form>
+    <p th:if="${newTarif}" th:text="${fetchResponse}"></p>
+    <p th:unless="${newTarif}" th:text="${fetchResponse}"></p>
+
+    <a th:href="@{/details}">Details</a>
 </div>
 </body>
 </html>

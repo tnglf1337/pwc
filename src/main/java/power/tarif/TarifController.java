@@ -1,6 +1,7 @@
 package power.tarif;
 
 import jakarta.validation.Valid;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -15,10 +16,12 @@ import java.time.LocalDate;
 public class TarifController {
 	 private final TarifRepository tarifRepository;
 	 private final TarifService tarifService;
+	 private final TarifUpdateService tarifUpdateService;
 
-	public TarifController(TarifRepository tarifRepository, TarifService tarifService) {
+	public TarifController(TarifRepository tarifRepository, TarifService tarifService, TarifUpdateService tarifUpdateService) {
 		this.tarifRepository = tarifRepository;
 		this.tarifService = tarifService;
+		this.tarifUpdateService = tarifUpdateService;
 	}
 
 	@GetMapping("/tarif")
@@ -33,6 +36,20 @@ public class TarifController {
 		if(bindingResult.hasErrors()) return "tarif";
 		redirectAttributes.addFlashAttribute("tarifForm", tarifForm);
 		tarifService.save(new Tarif(tarifForm.getTarifKosten()));
+		return "redirect:/";
+	}
+
+	@GetMapping("/check-tarif")
+	public String checkTarif(RedirectAttributes redirectAttributes) {
+		boolean updated = tarifUpdateService.compareTarifs();
+
+		if(updated) {
+			redirectAttributes.addFlashAttribute("fetchResponse", "Tarif wurde aktualisiert.");
+			redirectAttributes.addFlashAttribute("newTarif", true);
+		} else {
+			redirectAttributes.addFlashAttribute("fetchResponse", "Kein neuer Tarif vorhanden.");
+			redirectAttributes.addFlashAttribute("newTarif", false);
+		}
 		return "redirect:/";
 	}
 }
