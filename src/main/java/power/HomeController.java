@@ -9,6 +9,7 @@ import power.laufzeit.LaufzeitFileManager;
 import power.tarif.Tarif;
 import power.tarif.TarifForm;
 import power.tarif.TarifService;
+import power.util.Formatter;
 import java.io.IOException;
 import java.time.LocalDate;
 import static power.util.Formatter.*;
@@ -43,5 +44,13 @@ public class HomeController {
 		model.addAttribute("currentCost",format(currentCost));
 
 		return "home";
+	}
+
+	@GetMapping("/details")
+	public String detail(Model model) {
+		model.addAttribute("thisMonth", Formatter.getCurrentMonthAsString());
+		model.addAttribute("monthDetails",laufzeitEventService.computeTableDetailsThisMonth(LocalDate.now().getMonthValue()));
+		model.addAttribute("monthsDetails",laufzeitEventService.computeTableDetailsMonthly());
+		return "details";
 	}
 }
