@@ -33,5 +33,5 @@ build/
 .vscode/
 
 #
-/powerconsumption-data
-.gitignore
+powerconsumption-data
+.env
