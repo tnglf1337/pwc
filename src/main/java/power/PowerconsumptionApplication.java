@@ -17,6 +17,7 @@ public class PowerconsumptionApplication {
 	@Bean
 	public CommandLineRunner commandLineRunner(LaufzeitFileManager laufzeitFileManager) {
 		return args -> {
+
 			int seconds = laufzeitFileManager.readNumber();
 			while (true) {
 				seconds++;

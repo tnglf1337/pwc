@@ -6,6 +6,10 @@
     flex-direction: column;
 }
 
-#stromverbrauch-info-box {
+.info-box {
     width: 500px;
+}
+
+.db-size p {
+    margin: 0;
 }

@@ -1,36 +1,44 @@
 package power.calc;
 
-
-import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
 public class ConsumptionCalculator {
 
-	@Value("${verbrauch.watt.normal}")
-	private int verbrauchWattNormal;
+	private final double EPSILON = 0.6;
 
-	@Value("${verbrauch.gewicht.normal}")
-	private double gewichtNormal;
+	@Value("${verbrauch.cpu.min}")
+	private int cpu_min;
 
-	@Value("${verbrauch.watt.last}")
-	private int verbrauchWattLast;
+	@Value("${verbrauch.cpu.max}")
+	private int cpu_max;
 
-	@Value("${verbrauch.gewicht.last}")
-	private double gewichtLast;
+	@Value("${verbrauch.gpu.min}")
+	private int gpu_min;
 
-	public ConsumptionCalculator() {
+	@Value("${verbrauch.gpu.max}")
+	private int gpu_max;
+
+	@Value("${verbrauch.aio}")
+	private int aio;
+
+	@Value("${verbrauch.monitor}")
+	private int monitor;
+
+	private double getMinWattConsumption() {
+		return cpu_min + gpu_min + aio + monitor;
 	}
 
-	public double averageWattConsumption() {
-		return ((verbrauchWattNormal * gewichtNormal)
-				+ (verbrauchWattLast * gewichtLast))
-				/ (gewichtNormal + gewichtLast);
+	private double getMaxWattConsumption() {
+		return cpu_max + gpu_max + aio + monitor;
+	}
+
+	public double getWattConsumption() {
+		return EPSILON * getMinWattConsumption() + (1-EPSILON) * getMaxWattConsumption();
 	}
 
 	public double kiloWattProStunde(double stunde) {
-		double averageWatt = averageWattConsumption();
-		return averageWatt * stunde / 1000;
+		return getWattConsumption() * stunde / 1000;
 	}
 }

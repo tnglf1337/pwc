@@ -11,11 +11,19 @@
 </head>
 <body>
 <div id="stromverbrauch-info-container">
-    <div id="stromverbrauch-info-box" class="alert alert-primary" role="alert">
+    <div class="info-box alert alert-primary" role="alert">
         <h2>Stromverbrauch</h2>
         <p>Messung seit: <span th:text="${firstEventDate}"></span></p>
         <p>Kilowattstuden: <span th:text="${currentKwh}"></span> kwh bei ~<span th:text="${averageWatt}"></span> Watt</p>
         <p>Kosten: <span th:text="${currentCost}"></span>€ bei einem Tarif von <span th:text="${currentTarif}"></span> Cent/kwh</p>
+    </div>
+    <div class="info-box">
+        <div class="db-size alert alert-success" th:if="${dbSizeOk}">
+            <p><code>/powerconsumtion-data</code> Ordnergröße: OK (<span th:text="${folderSize} + 'MB/2GB'"></span>)</p>
+        </div>
+        <div class="db-size alert alert-warning" th:unless="${dbSizeOk}">
+            <p><code>/powerconsumtion-data</code> Ordnergröße EXCEEDS 2 GB (<span th:text="${folderSize} + 'MB'"></span>)</p>
+        </div>
     </div>
     <a th:href="@{/tarif}">Tarif erstellen</a>
     <form method="get" th:action="@{/check-tarif}">

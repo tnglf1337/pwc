@@ -36,7 +36,7 @@ public class LaufzeitEventService {
 		this.calculator = calculator;
 	}
 
-	@Scheduled(fixedRate = 600000)
+	@Scheduled(fixedRate = 300000)
 	public void stampEvent() throws IOException {
 		Tarif aktuellerTarif = tarifRepository.findAktuellertatrif();
 		int laufzeit = laufzeitFileManager.readNumber();
@@ -60,6 +60,15 @@ public class LaufzeitEventService {
 
 	public int getLaufzeitSekundenByDate(LocalDate date) {
 		List<LaufzeitEvent> events = laufzeitEventRepository.findByStampedAt(date);
+
+		// Wenn nur ein Event für diesen Tag existiert, beträgt die Laufzeit 300 Sekunden (5 Minuten).
+		// Das ist das Zeitinterval, mit dem ein LaufzeitEvent gestempelt wird.
+		// Ohne den Fall, gibt es keinen zweitej Timestamp, um die Laufzeitdifferenz zu berechnen, sodass im Frontend
+		// zB "3d 20h 11m" angezeigt wird. Das passiert, wenn der Computer tatsächlich nur maximal <5min lief.
+		if (events.size() == 1) {
+			return 300;
+		}
+
 		if (events.isEmpty()) return 0;
 		return getLaufzeitSekunden(events);
 	}
@@ -77,14 +86,14 @@ public class LaufzeitEventService {
 		if(events.size() == 1) return events.get(0).laufzeit();
 
 		int min = events.get(0).laufzeit();
-		int max = events.get(0).laufzeit();
+		int max = events.get(events.size()-1).laufzeit();
 
 		for (LaufzeitEvent event : events) {
 			int currentLaufzeit = event.laufzeit();
 			if (currentLaufzeit < min) min = event.laufzeit();
 			if (currentLaufzeit > max) max = currentLaufzeit;
 		}
-		return max - min;
+		return max -min;
 	}
 
 	public List<DetailsDto> computeTableDetailsThisMonth(int monthValue) {

@@ -10,3 +10,17 @@ services:
       - "POSTGRES_DB=power"
       - "POSTGRES_USER=timo"
       - "POSTGRES_PASSWORD=1234"
+  powerconsumption-service:
+    container_name: powerconsumption-service
+    build:
+      dockerfile: Dockerfile
+    ports:
+      - "${SERVER_PORT}:${SERVER_PORT}"
+    environment:
+      - SERVER_PORT=${SERVER_PORT}
+      - SPRING_DATASOURCE_USERNAME=${DB_USER}
+      - SPRING_DATASOURCE_PASSWORD=${DB_PASS}
+    env_file:
+      - .env
+    volumes:
+      - ./powerconsumption-data:/app/powerconsumption-data

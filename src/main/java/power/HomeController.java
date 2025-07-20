@@ -4,6 +4,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import power.calc.ConsumptionCalculator;
+import power.db.DatabaseSizeChecker;
 import power.laufzeit.LaufzeitEventService;
 import power.laufzeit.LaufzeitFileManager;
 import power.tarif.Tarif;
@@ -11,7 +12,10 @@ import power.tarif.TarifForm;
 import power.tarif.TarifService;
 import power.util.Formatter;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.time.LocalDate;
+import java.util.List;
+
 import static power.util.Formatter.*;
 
 @Controller
@@ -21,12 +25,14 @@ public class HomeController {
 	private final TarifService tarifService;
 	private final LaufzeitFileManager laufzeitFileManager;
 	private final ConsumptionCalculator calculator;
+	private final DatabaseSizeChecker databaseSizeChecker;
 
-	public HomeController(LaufzeitEventService laufzeitEventService, TarifService tarifService, LaufzeitFileManager laufzeitFileManager, ConsumptionCalculator calculator) {
+	public HomeController(LaufzeitEventService laufzeitEventService, TarifService tarifService, LaufzeitFileManager laufzeitFileManager, ConsumptionCalculator calculator, DatabaseSizeChecker databaseSizeChecker) {
 		this.laufzeitEventService = laufzeitEventService;
 		this.tarifService = tarifService;
 		this.laufzeitFileManager = laufzeitFileManager;
 		this.calculator = calculator;
+		this.databaseSizeChecker = databaseSizeChecker;
 	}
 
 	@GetMapping("/")
@@ -34,7 +40,7 @@ public class HomeController {
 		LocalDate firstEventDate = laufzeitEventService.getFirstEvent();
 		Tarif currentTarif = tarifService.getCurrentTarif();
 		double currentKwh = calculator.kiloWattProStunde((double) laufzeitFileManager.readNumber() / (60*60));
-		int averageWatt = (int) calculator.averageWattConsumption();
+		int averageWatt = (int) calculator.getWattConsumption();
 		double currentCost = currentTarif.calculateKwhCost(currentKwh);
 
 		model.addAttribute("currentTarif", currentTarif.getTarifKosten());
@@ -42,6 +48,8 @@ public class HomeController {
 		model.addAttribute("currentKwh", format(currentKwh));
 		model.addAttribute("averageWatt", averageWatt);
 		model.addAttribute("currentCost",format(currentCost));
+		model.addAttribute("dbSizeOk", databaseSizeChecker.checkDatabaseSize());
+		model.addAttribute("folderSize", databaseSizeChecker.getSizeInMb());
 
 		return "home";
 	}

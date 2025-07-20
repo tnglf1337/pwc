@@ -28,7 +28,7 @@
                 <td th:text="${detail.date()}"></td>
                 <td th:text="${detail.laufzeit()}"></td>
                 <td th:text="${detail.kwh()}"></td>
-                <td th:text="${detail.kosten()}"></td>
+                <td th:text="${detail.kosten() + '€'}"></td>
             </tr>
             </tbody>
         </table>

@@ -10,7 +10,7 @@ public class LaufzeitFileManager {
 	private final Path filePath;
 
 	public LaufzeitFileManager() throws IOException {
-		this.filePath = Path.of("C:\\Program Files (x86)\\pwc\\src\\main\\resources\\data\\laufzeit.txt");
+		this.filePath = Path.of("C:\\Users\\Timo\\Documents\\myrepos\\pwc\\src\\main\\resources\\data\\laufzeit.txt");
 
 		if (Files.notExists(filePath)) {
 			Files.createFile(filePath);

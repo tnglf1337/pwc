@@ -11,3 +11,5 @@ create table tarif(
     tarif_kosten float,
     stand date
 );
+
+INSERT INTO tarif (tarif_kosten, stand) VALUES (0.1, '2023-01-01');
